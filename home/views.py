@@ -4,9 +4,12 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 
+from django.contrib.auth.decorators import login_required
+
 import json
 
 from django.contrib import messages
+
 from home.models import *
 
 
@@ -67,11 +70,14 @@ def search(request):
 
 def handleLogin(request):
     page = 'login'
+    if request.user.is_authenticated:
+        return redirect('index')
+
     if request.method == 'POST':
         username = request.POST.get('loginusername')
         password = request.POST.get('loginpass')
 
-        user = authenticate(username=username, password=password)
+        user = authenticate(request, username=username, password=password)
 
         if user is not None:
             login(request, user)
@@ -93,6 +99,8 @@ def handleLogin(request):
 
 def admin_register(request):
     page = 'admin'
+    if request.user.is_authenticated:
+        return redirect('index')
     
     if request.method == 'POST':
         username = request.POST['admin_username']
@@ -114,6 +122,9 @@ def admin_register(request):
 
 def user_register(request):
     page = 'user_register'
+    if request.user.is_authenticated:
+        return redirect('index')
+    
     services = Service.objects.all()
 
     if request.method == 'POST':
@@ -137,7 +148,9 @@ def user_register(request):
 
 def customer_register(request):
     page = 'customer_register'
-
+    if request.user.is_authenticated:
+        return redirect('index')
+    
     if request.method == 'POST':
         data = request.POST
         image = request.FILES.get('c_image')
@@ -155,7 +168,7 @@ def customer_register(request):
     context = {'page': page}
     return render(request, 'login_register.html', context)
 
-
+@login_required(login_url='login')
 def handleLogout(request):
     logout(request)
     messages.success(request, 'User logout successfully!')
@@ -176,9 +189,8 @@ def serviceView(request, myid):
 
     return render(request, 'service_view.html', context)
 
-
+@login_required(login_url='login')
 def addService(request):
-
     if request.method == 'POST':
         data = request.POST
         image = request.FILES.get('image')
@@ -196,7 +208,7 @@ def addService(request):
 
     return render(request, 'add_service.html')
 
-
+@login_required(login_url='login')
 def profile(request):
     users = User.objects.get(id=request.user.id)
     
@@ -209,7 +221,7 @@ def profile(request):
 
     return render(request, 'profile.html', {'profile': profile})
 
-
+@login_required(login_url='login')
 def book_service(request):
     # service = Service.objects.filter()[0]
 
@@ -243,7 +255,7 @@ def book_service(request):
     return render(request, 'book_service.html')
     # return render(request, 'book_service.html', context)
 
-
+@login_required(login_url='login')
 def tracker(request):
     if request.method == "POST":
         bookId = request.POST.get('bookId', '')
@@ -274,34 +286,42 @@ def tracker(request):
     return render(request, 'tracker.html')
 
 
-
+@login_required(login_url='login')
 def user_profile(request):
-    category = request.GET.get('category')
-    
-    
-    if category == None:
-        services = Service.objects.all()
-        return render(request, 'user_profile.html', {'services': services})
+    if request.user.is_staff:
         
+        category = request.GET.get('category')
+            
+        if category == None:
+            services = Service.objects.all()
+            return render(request, 'user_profile.html', {'services': services})
+            
 
-    elif category == 'users':
-        users = Service_Man.objects.all()
-        return render(request, 'user_profile.html', {'users': users})
+        elif category == 'users':
+            users = Service_Man.objects.all()
+            return render(request, 'user_profile.html', {'users': users})
+            
         
-    
-    elif category == 'customer':
-        customers = Customer.objects.all()
-        return render(request, 'user_profile.html', {'customers': customers})
-        
+        elif category == 'customer':
+            customers = Customer.objects.all()
+            return render(request, 'user_profile.html', {'customers': customers})
+            
+        else:
+            return render(request, 'user_profile.html')
+
     else:
-        return render(request, 'user_profile.html')
+        return HttpResponse('Error')
 
-
+@login_required(login_url='login')
 def admin_home(request):
-    services = Service.objects.all()
-    users = Service_Man.objects.all()
-    customers = Customer.objects.all()
+    if request.user.is_staff:
+        services = Service.objects.all()
+        users = Service_Man.objects.all()
+        customers = Customer.objects.all()
 
-    context = {'services': services, 'users':users, 'customers': customers}
+        context = {'services': services, 'users':users, 'customers': customers}
+        
+        return render(request, 'admin_home.html', context)
     
-    return render(request, 'admin_home.html', context)
+    else:
+        return redirect('index')
