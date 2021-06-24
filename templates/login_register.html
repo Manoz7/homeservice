@@ -1,0 +1,267 @@
+{% extends 'base.html' %}
+{% block title %} Login {% endblock title %}
+
+{% block body %}
+<div class="container-fluid my-3">
+
+    {% if page == 'login' %}
+    <div class="container d-flex flex-column w-75 cover-height">
+
+        <h2>Please Log In</h2>
+
+        <form action="/login/" method="POST">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="loginusername" name="loginusername"
+                    placeholder="Choose a unique username">
+            </div>
+            <div class="form-group my-2">
+                <label for="loginpass">Enter your password </label>
+                <input type="password" class="form-control" id="loginpass" name="loginpass"
+                    placeholder="Enter your password ">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+        <div class="p-3">
+            <h5>Don't Have An Account?? </h5>
+            <a href="/user_register">Register as User</a> OR
+            <a href="/customer_register">Register as Customer</a>
+
+        </div>
+    </div>
+
+    {% elif page == 'user_register' %}
+    <div class="container cover-height">
+
+        <h2>Welcome User, Please Register</h2>
+
+        <form action="/user_register/" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="user_username">Username</label>
+                <input type="text" class="form-control" id="user_username" name="user_username"
+                    placeholder="Choose a unique username">
+            </div>
+            <div class="form-group my-2">
+                <div class="row">
+                    <div class="col">
+                        <label for="user_fname">First Name</label>
+                        <input type="text" class="form-control" id="user_fname" name="user_fname"
+                            placeholder="Enter Your First Name">
+                    </div>
+                    <div class="col">
+                        <label for="user_lname">Last Name</label>
+                        <input type="text" class="form-control" id="user_lname" name="user_lname"
+                            placeholder="Enter Your Last Name">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+
+                <label for="user_email">Email address</label>
+                <input type="email" class="form-control" id="user_email" name="user_email"
+                    placeholder="name@example.com">
+            </div>
+
+
+            <div class="form-group my-2">
+                <div class="row">
+                    <div class="col">
+
+                        <label>Address</label>
+                        <input type="text" class="form-control" id="user_address" name="user_address"
+                            placeholder="Enter Address">
+                    </div>
+                    <div class="col">
+
+                        <label>Phone Number</label>
+                        <input type="tel" class="form-control" id="user_phone" name="user_phone"
+                            placeholder="Enter Phone Number">
+                    </div>
+
+                </div>
+            </div>
+            <div class="form-group my-2">
+                <div class="row">
+                    <div class="col">
+                        <label for="user_pass1">Choose a password</label>
+                        <input type="password" class="form-control" id="user_pass1" name="user_pass1"
+                            placeholder="Choose Your Password">
+                    </div>
+                    <div class="col">
+
+                        <label for="user_pass2">Confirm Password</label>
+                        <input type="password" class="form-control" id="user_pass2" name="user_pass2"
+                            placeholder="Confirm Password">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Select the Service</label>
+                <select class="form-select" aria-label="Default select example" name="service" id="service">
+                    <option value="none">Select Service</option>
+
+                    {% for service in services %}
+
+                    <option value="{{service.service_id}}">{{service}}</option>
+
+                    {% endfor %}
+                </select>
+            </div>
+            <!--
+            <div class="form-group mt-2">
+                <label>Create Service</label>
+                <input type="text" name="newService" id="newService" class="form-control"
+                    placeholder="Create New Service">
+            </div>
+        -->
+            <div class="form-group my-2">
+                <label>Upload Image</label>
+                <input type="file" name="image" id="image">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+
+        </form>
+        <div>Already Have An Account? <a href="/login">Login</a>
+        </div>
+    </div>
+    {% elif page == "customer_register" %}
+    <div class="cover-height container">
+
+        <h2>Welcome Customer, Please Register</h2>
+
+        <form action="/customer_register/" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="customer_username">Username</label>
+                <input type="text" class="form-control" id="customer_username" name="customer_username"
+                    placeholder="Choose a unique username">
+            </div>
+            <div class="form-group my-2">
+                <div class="row">
+                    <div class="col">
+                        <label for="customer_fname">First Name</label>
+                        <input type="text" class="form-control" id="customer_fname" name="customer_fname"
+                            placeholder="Enter Your First Name">
+                    </div>
+                    <div class="col">
+                        <label for="customer_lname">Last Name</label>
+                        <input type="text" class="form-control" id="customer_lname" name="customer_lname"
+                            placeholder="Enter Your Last Name">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="customer_email">Email address</label>
+                <input type="email" class="form-control" id="customer_email" name="customer_email"
+                    placeholder="name@example.com">
+            </div>
+
+            <div class="form-group my-2">
+
+                <div class="row">
+                    <div class="col">
+                        <label>Address</label>
+                        <input type="text" class="form-control" id="customer_address" name="customer_address"
+                            placeholder="Enter Address">
+                    </div>
+                    <div class="col">
+
+                        <label>Phone Number</label>
+                        <input type="tel" class="form-control" id="customer_phone" name="customer_phone"
+                            placeholder="Enter Phone Number">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group my-2">
+                <div class="row">
+                    <div class="col">
+                        <label for="customer_pass1">Choose a password</label>
+                        <input type="password" class="form-control" id="customer_pass1" name="customer_pass1"
+                            placeholder="Choose Your Password">
+                    </div>
+                    <div class="col">
+
+                        <label for="customer_pass2">Confirm Password</label>
+                        <input type="password" class="form-control" id="customer_pass2" name="customer_pass2"
+                            placeholder="Confirm Password">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group my-2">
+                <label>Upload Profile Image</label>
+                <input type="file" name="c_image" id="c_image">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <div>Already Have An Account? <a href="/login">Login</a>
+
+        </div>
+    </div>
+
+    {% else %}
+    <div class="container cover-height">
+
+        <h2>Welcome Admin, Please Register</h2>
+        <form action="/admin_register/" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="admin_username">Username</label>
+                <input type="text" class="form-control" id="admin_username" name="admin_username"
+                    placeholder="Choose a unique username">
+            </div>
+            <div class="form-group my-2">
+                <div class="row">
+                    <div class="col">
+                        <label for="a_fname">First Name</label>
+                        <input type="text" class="form-control" id="a_fname" name="a_fname"
+                            placeholder="Enter Your First Name">
+                    </div>
+                    <div class="col">
+                        <label for="a_lname">Last Name</label>
+                        <input type="text" class="form-control" id="a_lname" name="a_lname"
+                            placeholder="Enter Your Last Name">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="admin_email">Email address</label>
+                <input type="email" class="form-control" id="admin_email" name="admin_email"
+                    placeholder="name@example.com">
+            </div>
+
+            
+            <div class="form-group my-2">
+                <div class="row">
+                    <div class="col">
+                        <label for="pw1">Choose a password</label>
+                        <input type="password" class="form-control" id="pw1" name="pw1"
+                            placeholder="Choose Your Password">
+                    </div>
+                    <div class="col">
+
+                        <label for="pw2">Confirm Password</label>
+                        <input type="password" class="form-control" id="pw2" name="pw2"
+                            placeholder="Confirm Password">
+                    </div>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+    {% endif %}
+</div>
+
+{% endblock body %}

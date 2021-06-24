@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% block title %} {{service.service_name}} {% endblock title %}
+
+{% block body %}
+<div class="container-fluid">
+
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{message.tags}}" role="alert">
+        <strong> {{message}}</strong>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <div class="container mt-5">
+
+        <div class="row">
+
+            <div class="col-md-4">
+
+                <div class="row">
+                    <img src='/media/{{service.image}}' class="card-img-top" width="233px" height="295px">
+
+                </div>
+                <div class="row mt-3 mx-3">
+                    {% if user.is_authenticated %}
+
+                    <a href="/book_service/" class="btn btn-primary">Book Now</a>
+                    {% else %}
+                    <button href="#" class="btn btn-primary" disabled>Login To Book</button>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="col-md-8 p-5">
+                <h4>{{ service.service_name }}</h4>
+                <!-- <h6>{{product.category}}, {{product.subcategory}}</h6> -->
+                <!-- <p><b>Rs. {{ product.price }}</b></p> -->
+                <p>{{ service.service_desc }}</p>
+            </div>
+
+        </div>
+
+        <div class="my-3">
+            <h3>Available Users:: (Any One will contact you)</h3>
+
+            <div class="row mt-2">
+                <div class="col-md-6">
+                    <div class="card" style="width: 18rem;">
+                        <img src="..." class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">Some quick example text to build on the card title and make up the
+                                bulk
+                                of
+                                the card's content.</p>
+                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card" style="width: 18rem;">
+                        <img src="..." class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">Some quick example text to build on the card title and make up the
+                                bulk
+                                of
+                                the card's content.</p>
+                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card" style="width: 18rem;">
+                        <img src="..." class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">Some quick example text to build on the card title and make up the
+                                bulk
+                                of
+                                the card's content.</p>
+                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card" style="width: 18rem;">
+                        <img src="..." class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">Some quick example text to build on the card title and make up the
+                                bulk
+                                of
+                                the card's content.</p>
+                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock body %}

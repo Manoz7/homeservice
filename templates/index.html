@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Home {% endblock title %}
+
+{% block body %}
+<header class="header container-fluid">
+    <div class="header-content">
+
+        <h2>Welcome to Ghar Sewa</h2>
+        <p>A quick solution to your everyday problems. We fix things around your house so you don’t have to.</p>
+        <div>
+            <a href="#" class="btn btn-sm btn-primary">Let's Go</a>
+        </div>
+    </div>
+</header>
+
+<section id="aboutus" class="container my-3">
+    <div>
+        <h4 class="section-title">About US</h4>
+
+        <h2>Who We Are?</h2>
+    </div>
+    <div class="row d-flex">
+        <div class="col">
+            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tenetur non, excepturi cumque reiciendis
+                repellendus dolorum, deserunt nemo, officia voluptatem quis beatae nulla tempora adipisci obcaecati
+                quidem labore quo blanditiis rem. Veritatis doloremque asperiores culpa deleniti sed doloribus vel,
+                esse
+                laboriosam quibusdam blanditiis quas voluptatibus obcaecati. Maxime dolore recusandae dolor eaque
+                asperiores ut! Sit, dolores expedita.</p>
+            <h4>Some of our features are:</h4>
+            <ul>
+                <li>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</li>
+                <li>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</li>
+                <li>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</li>
+                <li>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</li>
+                <li>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</li>
+                <li>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</li>
+                <li>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</li>
+                <li>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</li>
+            </ul>
+        </div>
+        <div class="col">
+            <p>Best IT solutions and consultancy can be provided from our experienced team members and can be
+                helpful for your problems. We can do our best to fulfill your demands and wishes. Any confusions or
+                doubts related with the IT sectors can be cleared from our Team. </p>
+            <a href="#" class="btn btn-primary">More Info</a>
+        </div>
+    </div>
+
+</section>
+
+<section id="services" class="container my-3">
+    <div>
+        <h4 class="section-title">Our Services</h4>
+        <h2>What We Offer?</h2>
+    </div>
+    <br>
+    <div class="row serv-card">
+        <div class="col-md-4 col-sm-12">
+            <div class="card">
+                <img class="card-img-top p-4" src="/static/img/services/img-1.png" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">Cleaning <span style="color:red">(<span
+                                style="color:black;font-weight:bold">1</span>)</span></h5>
+                    <p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting
+                        industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
+                    </p>
+                    <a href="#" class="btn btn-primary">Book</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-sm-12">
+            <div class="card">
+                <img class="card-img-top p-4" src="/static/img/services/img-1.png" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">Cleaning <span style="color:red">(<span
+                                style="color:black;font-weight:bold">1</span>)</span></h5>
+                    <p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting
+                        industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
+                    </p>
+                    <a href="/explore_services(2)" class="btn btn-primary">Book</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-sm-12">
+            <div class="card">
+                <img class="card-img-top p-4" src="/static/img/services/img-1.png" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">Cleaning <span style="color:red">(<span
+                                style="color:black;font-weight:bold">1</span>)</span></h5>
+                    <p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting
+                        industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
+                    </p>
+                    <a href="/explore_services(3)" class="btn btn-primary">Book</a>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</section>
+
+<div class="slogan container my-4 text-center p-4">
+
+    <h6 style="text-transform: uppercase;">A place for all your needs.</h6>
+    <q>From attics to basements, everything in between, We care to fix it right</q>
+
+    <div class="mt-2">
+        <h3><em>- Ghar Sewa</em></h3>
+        <a href="{% url 'contact' %}" class="btn btn-outline-primary">Contact Us</a>
+    </div>
+
+</div>
+{% endblock body %}

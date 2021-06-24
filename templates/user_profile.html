@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} User Profile {% endblock title %}
+{% block css %}
+<style>
+    .image-thumbnail {
+        display: block;
+        max-width: 200px;
+        max-height: 200px;
+    }
+
+    .card {
+        width: 90%;
+    }
+
+    a {
+        text-decoration: none;
+        color: black;
+    }
+
+    a:hover {
+        color: black;
+    }
+</style>
+{% endblock css %}
+{% block body %}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header">
+                    Services
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <a href="{% url 'user_profile' %}">Services</a>
+                    </li>
+
+                    <li class="list-group-item">
+                        <a href="{% url 'user_profile' %}?category=users">Service Man</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="{% url 'user_profile' %}?category=customer">Customer</a>
+                    </li>
+
+
+                </ul>
+                <a href="{% url 'add_service' %}" class="btn btn-outline-dark p-2 m-3">Add Service</a>
+
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="row">
+                {% for service in services %}
+                <div class="col-md-4">
+                    <div class="card my-2">
+                        <img src="{{service.image.url}}" class="image-thumbnail w-75 m-auto" alt="Photos">
+                        <div class="card-body">
+                            <small>Category: {{service.service_name}}</small>
+                        </div>
+                        <a href="/services/{{service.service_id}}" class="btn btn-outline-primary btn-sm m-1">Quick
+                            View</a>
+                        <a href="#" class="btn btn-outline-danger btn-sm m-1">Delete</a>
+                    </div>
+                </div>
+
+                {% endfor %}
+
+                {% for customer in customers %}
+                <div class="col-md-4">
+                    <div class="card my-2">
+                        <img src="{{customer.image.url}}" class="image-thumbnail w-75 m-auto" alt="Photos">
+                        <div class="card-body">
+                            <small>Category: {{customer.user.username}}</small>
+                        </div>
+                        <a href="/profile" class="btn btn-outline-primary btn-sm m-1">View Profile</a>
+                        <a href="#" class="btn btn-outline-danger btn-sm m-1">Delete</a>
+
+                    </div>
+                </div>
+
+                {% endfor %}
+
+                {% for user in users %}
+                <div class="col-md-4">
+                    <div class="card my-2">
+                        <img src="{{user.image.url}}" class="image-thumbnail w-75 m-auto" alt="Photos">
+                        <div class="card-body">
+                            <small>Category: {{user.user.username}}</small>
+                        </div>
+                        <a href="/profile" class="btn btn-outline-primary btn-sm m-1">View Profile</a>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal">
+                            Launch demo modal
+                        </button>
+
+                    </div>
+                </div>
+
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Launch demo modal
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Do you sure wanna delete this??
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock body %}
