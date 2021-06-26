@@ -15,15 +15,17 @@ from home.models import *
 
 # Create your views here.
 def index(request):
-    return render(request, 'index.html')
+    services=Service.objects.all()
+    return render(request, 'index.html', {'services':services})
+
 
 def notification():
     status = Status.objects.get(status='pending')
     new = Service_Man.objects.filter(status=status)
-    count=0
+    count = 0
     for i in new:
-        count+=1
-    d = {'count':count,'new':new}
+        count += 1
+    d = {'count': count, 'new': new}
     return d
 
 
@@ -88,11 +90,12 @@ def handleLogin(request):
                 # print(user)
                 messages.success(request, 'User login successfully!')
                 return redirect('index')
-        
+
         else:
-            messages.error(request, 'Username and password does not match!! Please enter right credential!')
+            messages.error(
+                request, 'Username and password does not match!! Please enter right credential!')
             return redirect('login')
-            
+
     context = {'page': page}
     return render(request, 'login_register.html', context)
 
@@ -101,44 +104,48 @@ def admin_register(request):
     page = 'admin'
     if request.user.is_authenticated:
         return redirect('index')
-    
+
     if request.method == 'POST':
         username = request.POST['admin_username']
         email = request.POST['admin_email']
-        password1 = request.POST['pw1'] 
-        password2 = request.POST['pw2'] 
+        password1 = request.POST['pw1']
+        password2 = request.POST['pw2']
         fname = request.POST['a_fname']
         lname = request.POST['a_lname']
-                
+
         # Create the admin user
-        user = User.objects.create_superuser(username= username.lower(), email=email, password=password1, first_name=fname, last_name=lname)
+        user = User.objects.create_superuser(username=username.lower(
+        ), email=email, password=password1, first_name=fname, last_name=lname)
         user.save()
-        
+
         login(request, user)
         return redirect('admin_home')
-    
+
     context = {'page': page}
     return render(request, 'login_register.html', context)
+
 
 def user_register(request):
     page = 'user_register'
     if request.user.is_authenticated:
         return redirect('index')
-    
+
     services = Service.objects.all()
 
     if request.method == 'POST':
         data = request.POST
         image = request.FILES.get('image')
-
+        
         # Create the user
 
         user = User.objects.create_user(username=data['user_username'].lower(
         ), email=data['user_email'], password=data['user_pass1'], first_name=data['user_fname'], last_name=data['user_lname'])
         user.save()
+        
+        service = Service.objects.get(service_id=data['service'])
 
         Service_Man.objects.create(
-            user=user, image=image, phone=data['user_phone'], address=data['user_address'], service=data['service'])
+            user=user, image=image, phone=data['user_phone'], address=data['user_address'], service=service)
         login(request, user)
         return redirect("/")
 
@@ -150,7 +157,7 @@ def customer_register(request):
     page = 'customer_register'
     if request.user.is_authenticated:
         return redirect('index')
-    
+
     if request.method == 'POST':
         data = request.POST
         image = request.FILES.get('c_image')
@@ -168,6 +175,7 @@ def customer_register(request):
     context = {'page': page}
     return render(request, 'login_register.html', context)
 
+
 @login_required(login_url='login')
 def handleLogout(request):
     logout(request)
@@ -183,11 +191,14 @@ def services(request):
 def serviceView(request, myid):
     messages.success(
         request, 'What are you waiting for? --> Get your “To-Do” list ready and call us')
+    
     service = Service.objects.filter(service_id=myid)[0]
+    users = Service_Man.objects.filter(service=service)
 
-    context = {'service': service}
+    context = {'service': service, 'users': users}
 
     return render(request, 'service_view.html', context)
+
 
 @login_required(login_url='login')
 def addService(request):
@@ -208,18 +219,19 @@ def addService(request):
 
     return render(request, 'add_service.html')
 
+
 @login_required(login_url='login')
 def profile(request):
     users = User.objects.get(id=request.user.id)
-    
+
     try:
         profile = Customer.objects.get(user=users)
-    
-    except:
-        profile = Service_Man.objects.get(user = users)
 
+    except:
+        profile = Service_Man.objects.get(user=users)
 
     return render(request, 'profile.html', {'profile': profile})
+
 
 @login_required(login_url='login')
 def book_service(request):
@@ -254,6 +266,7 @@ def book_service(request):
 
     return render(request, 'book_service.html')
     # return render(request, 'book_service.html', context)
+
 
 @login_required(login_url='login')
 def tracker(request):
@@ -291,26 +304,35 @@ def user_profile(request):
     if request.user.is_staff:
         
         category = request.GET.get('category')
-            
+
         if category == None:
             services = Service.objects.all()
-            return render(request, 'user_profile.html', {'services': services})
+            count = services.count()
+            category = 'Total Services Offered'
             
+            return render(request, 'user_profile.html', {'services': services, 'count': count, 'category':category},)
 
         elif category == 'users':
             users = Service_Man.objects.all()
-            return render(request, 'user_profile.html', {'users': users})
+            count = users.count()
+            category = 'Total Service-Man'
             
-        
+            return render(request, 'user_profile.html', {'users': users, 'count': count, 'category':category})
+
         elif category == 'customer':
             customers = Customer.objects.all()
-            return render(request, 'user_profile.html', {'customers': customers})
+            count = customers.count()
             
+            category = "Total Customers"
+            return render(request, 'user_profile.html', {'customers': customers, 'count': count, 'category':category})
+
         else:
+            
             return render(request, 'user_profile.html')
 
     else:
         return HttpResponse('Error')
+
 
 @login_required(login_url='login')
 def admin_home(request):
@@ -319,9 +341,14 @@ def admin_home(request):
         users = Service_Man.objects.all()
         customers = Customer.objects.all()
 
-        context = {'services': services, 'users':users, 'customers': customers}
-        
+        total_services = services.count()
+        total_users = users.count()
+        total_customers = customers.count()
+
+        context = {'services': services, 'users': users, 'customers': customers,
+                   'total_services': total_services, 'total_users': total_users, 'total_customers': total_customers}
+
         return render(request, 'admin_home.html', context)
-    
+
     else:
         return redirect('index')

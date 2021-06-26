@@ -9,7 +9,7 @@
         <h2>Welcome to Ghar Sewa</h2>
         <p>A quick solution to your everyday problems. We fix things around your house so you don’t have to.</p>
         <div>
-            <a href="#" class="btn btn-sm btn-primary">Let's Go</a>
+            <a href="#services" class="btn btn-sm btn-primary">Let's Go</a>
         </div>
     </div>
 </header>
@@ -21,7 +21,7 @@
         <h2>Who We Are?</h2>
     </div>
     <div class="row d-flex">
-        <div class="col">
+        <div class="col-md-8">
             <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tenetur non, excepturi cumque reiciendis
                 repellendus dolorum, deserunt nemo, officia voluptatem quis beatae nulla tempora adipisci obcaecati
                 quidem labore quo blanditiis rem. Veritatis doloremque asperiores culpa deleniti sed doloribus vel,
@@ -40,11 +40,11 @@
                 <li>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</li>
             </ul>
         </div>
-        <div class="col">
+        <div class="col-md-4">
             <p>Best IT solutions and consultancy can be provided from our experienced team members and can be
                 helpful for your problems. We can do our best to fulfill your demands and wishes. Any confusions or
                 doubts related with the IT sectors can be cleared from our Team. </p>
-            <a href="#" class="btn btn-primary">More Info</a>
+            <a href="/about" class="btn btn-primary">More Info</a>
         </div>
     </div>
 
@@ -57,47 +57,26 @@
     </div>
     <br>
     <div class="row serv-card">
-        <div class="col-md-4 col-sm-12">
+        {% for item in services.all|slice:"0:3" %}
+        <div class="col-md-4">
             <div class="card">
-                <img class="card-img-top p-4" src="/static/img/services/img-1.png" alt="Card image cap">
+                <img class="card-img-top p-4" src="{{item.image.url}}" alt="Card image cap">
                 <div class="card-body">
-                    <h5 class="card-title">Cleaning <span style="color:red">(<span
+                    <h5 class="card-title">{{item.service_name}} <span style="color:red">(<span
                                 style="color:black;font-weight:bold">1</span>)</span></h5>
-                    <p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting
-                        industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
+                    <p class="card-text">{{item.service_desc|truncatechars:150}}
                     </p>
-                    <a href="#" class="btn btn-primary">Book</a>
+                    <a href="/services/{{item.service_id}}" class="btn btn-primary">Quick View</a>
+
                 </div>
             </div>
+        </div>
+        {% endfor %}
+
+        <div class=" card col-md-12 mt-2">
+            <a href="/services" class="btn btn-outline-primary m-auto w-25">Other Services</a></a>
         </div>
 
-        <div class="col-md-4 col-sm-12">
-            <div class="card">
-                <img class="card-img-top p-4" src="/static/img/services/img-1.png" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Cleaning <span style="color:red">(<span
-                                style="color:black;font-weight:bold">1</span>)</span></h5>
-                    <p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting
-                        industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
-                    </p>
-                    <a href="/explore_services(2)" class="btn btn-primary">Book</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4 col-sm-12">
-            <div class="card">
-                <img class="card-img-top p-4" src="/static/img/services/img-1.png" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Cleaning <span style="color:red">(<span
-                                style="color:black;font-weight:bold">1</span>)</span></h5>
-                    <p class="card-text">Lorem Ipsum is simply dummy text of the printing and typesetting
-                        industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
-                    </p>
-                    <a href="/explore_services(3)" class="btn btn-primary">Book</a>
-                </div>
-            </div>
-        </div>
 
 
     </div>
