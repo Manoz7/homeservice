@@ -7,6 +7,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
 import json
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
 
 from django.contrib import messages
 
@@ -15,8 +18,8 @@ from home.models import *
 
 # Create your views here.
 def index(request):
-    services=Service.objects.all()
-    return render(request, 'index.html', {'services':services})
+    services = Service.objects.all()
+    return render(request, 'index.html', {'services': services})
 
 
 def notification():
@@ -135,13 +138,13 @@ def user_register(request):
     if request.method == 'POST':
         data = request.POST
         image = request.FILES.get('image')
-        
+
         # Create the user
 
         user = User.objects.create_user(username=data['user_username'].lower(
         ), email=data['user_email'], password=data['user_pass1'], first_name=data['user_fname'], last_name=data['user_lname'])
         user.save()
-        
+
         service = Service.objects.get(service_id=data['service'])
 
         Service_Man.objects.create(
@@ -191,7 +194,7 @@ def services(request):
 def serviceView(request, myid):
     messages.success(
         request, 'What are you waiting for? --> Get your “To-Do” list ready and call us')
-    
+
     service = Service.objects.filter(service_id=myid)[0]
     users = Service_Man.objects.filter(service=service)
 
@@ -302,32 +305,32 @@ def tracker(request):
 @login_required(login_url='login')
 def user_profile(request):
     if request.user.is_staff:
-        
+
         category = request.GET.get('category')
 
         if category == None:
             services = Service.objects.all()
             count = services.count()
             category = 'Total Services Offered'
-            
-            return render(request, 'user_profile.html', {'services': services, 'count': count, 'category':category},)
+
+            return render(request, 'user_profile.html', {'services': services, 'count': count, 'category': category},)
 
         elif category == 'users':
             users = Service_Man.objects.all()
             count = users.count()
             category = 'Total Service-Man'
-            
-            return render(request, 'user_profile.html', {'users': users, 'count': count, 'category':category})
+
+            return render(request, 'user_profile.html', {'users': users, 'count': count, 'category': category})
 
         elif category == 'customer':
             customers = Customer.objects.all()
             count = customers.count()
-            
+
             category = "Total Customers"
-            return render(request, 'user_profile.html', {'customers': customers, 'count': count, 'category':category})
+            return render(request, 'user_profile.html', {'customers': customers, 'count': count, 'category': category})
 
         else:
-            
+
             return render(request, 'user_profile.html')
 
     else:
@@ -352,3 +355,33 @@ def admin_home(request):
 
     else:
         return redirect('index')
+
+
+@login_required(login_url='login')
+def deleteService(request, myid):
+
+    service = Service.objects.filter(service_id=myid)[0]
+
+
+    service.delete()
+    return redirect('user_profile')
+
+
+@login_required(login_url='login')
+def deleteCustomer(request, myid):
+
+    customer = Customer.objects.filter(id=myid)[0]
+
+
+    customer.delete()
+    return redirect('user_profile')
+
+@login_required(login_url='login')
+def deleteUser(request, myid):
+
+    users = Service_Man.objects.filter(id=myid)[0]
+
+
+    users.delete()
+    return redirect('user_profile')
+

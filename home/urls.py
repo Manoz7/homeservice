@@ -27,6 +27,12 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
 
     path('admin_home/', views.admin_home, name= 'admin_home'),
+    
+    
+    # CRUD function
+    path('deleteService/<int:myid>', views.deleteService, name='deleteService'),
+    path('deleteCustomer/<int:myid>', views.deleteCustomer, name='deleteCustomer'),
+    path('deleteUser/<int:myid>', views.deleteUser, name='deleteUser'),
 
 
 ]
