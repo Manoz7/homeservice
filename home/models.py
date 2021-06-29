@@ -48,7 +48,7 @@ class Service(models.Model):
 
 class Service_Man(models.Model):
     status = models.ForeignKey(Status, on_delete=models.CASCADE, null=True)
-    user = models.ForeignKey(User, on_delete=CASCADE, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     phone = models.CharField(max_length=20, null=True)
     image = models.ImageField(upload_to='service_man/', null=True)
     address = models.CharField(max_length=100, null=True)

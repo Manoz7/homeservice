@@ -18,6 +18,7 @@ from home.models import *
 
 # Create your views here.
 def index(request):
+    print(request.user)
     services = Service.objects.all()
     return render(request, 'index.html', {'services': services})
 
@@ -37,7 +38,6 @@ def about(request):
 
 
 def contact(request):
-    messages.success(request, 'Please Fill up the form to contact us!!')
     if request.method == 'POST':
 
         name = request.POST['name']
@@ -76,6 +76,7 @@ def search(request):
 def handleLogin(request):
     page = 'login'
     if request.user.is_authenticated:
+        messages.info(request, 'You are already logged in!!')
         return redirect('index')
 
     if request.method == 'POST':
@@ -88,7 +89,7 @@ def handleLogin(request):
             login(request, user)
             if user.is_staff:
                 messages.success(request, 'User login successfully!')
-                return redirect('admin_home')
+                return redirect('dashboard')
             else:
                 # print(user)
                 messages.success(request, 'User login successfully!')
@@ -218,7 +219,8 @@ def addService(request):
                 service_desc=data['service_desc'],
                 image=image
             )
-            return redirect('services')
+            messages.success(request, 'Service Added!!')
+            return redirect('allservices')
 
     return render(request, 'add_service.html')
 
@@ -352,36 +354,90 @@ def admin_home(request):
                    'total_services': total_services, 'total_users': total_users, 'total_customers': total_customers}
 
         return render(request, 'admin_home.html', context)
-
     else:
         return redirect('index')
 
 
-@login_required(login_url='login')
+def dashboard(request):
+    return render(request, 'admin/dashboard.html')
+
+
+def allServices(request):
+    services = Service.objects.all()
+    return render(request, 'admin/allservices.html', {'services': services})
+
+
+def editServices(request, pid):
+    ser = Service.objects.get(service_id=pid)
+
+    if request.method == 'POST':
+        data = request.POST
+        try:
+            image = request.FILES['image']
+            ser.image = image
+            ser.save()
+        except:
+            pass
+
+        ser.service_name = data['service_name']
+        ser.service_desc = data['service_desc']
+        ser.save()
+
+        messages.success(request, 'Service Updated!!')
+
+    return render(request, 'admin/edit_services.html', {'ser': ser})
+
+
 def deleteService(request, myid):
 
-    service = Service.objects.filter(service_id=myid)[0]
-
+    service = Service.objects.get(service_id=myid)
+    print(service.service_name)
 
     service.delete()
-    return redirect('user_profile')
+    messages.success(request, 'Service Deleted!')
+    return redirect('allservices')
 
 
-@login_required(login_url='login')
-def deleteCustomer(request, myid):
+def allUsers(request):
+    users = Service_Man.objects.all()
 
-    customer = Customer.objects.filter(id=myid)[0]
+    return render(request, 'admin/allusers.html', {'users': users})
 
 
-    customer.delete()
-    return redirect('user_profile')
-
-@login_required(login_url='login')
 def deleteUser(request, myid):
 
-    users = Service_Man.objects.filter(id=myid)[0]
+    users = Service_Man.objects.get(id=myid)
+    user = User.objects.get(username=users)
 
-
+    # To delete Service Provider
     users.delete()
-    return redirect('user_profile')
+    
+    # To delete user
+    user.delete()
+    messages.success(request, f'{user} Deleted')
+    return redirect('allusers')
 
+
+def allCustomers(request):
+    customers = Customer.objects.all()
+
+    return render(request, 'admin/allcustomers.html', {'customers': customers})
+
+
+def deleteCustomer(request, myid):
+
+    customer = Customer.objects.get(id=myid)
+    user = User.objects.get(username=customer)
+
+    # To delete user
+    user.delete()
+    # To delete customer
+    customer.delete()
+
+    messages.success(request, 'Customer Deleted!')
+    return redirect('allcustomers')
+
+def feedback(request):
+    msg = Contact.objects.all()
+    
+    return render(request, 'admin/feedback.html', {'msg': msg})

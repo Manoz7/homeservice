@@ -32,7 +32,8 @@
         <h3>Your Booking Status</h3>
         <div class="my-4">
             <ul class="list-group mt-4" id="items">
-                
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    ${text}
             </ul>
         </div>
     </div>
@@ -74,7 +75,8 @@
 
                         mystr = `<li class="list-group-item d-flex justify-content-between align-items-center">
                 ${text}
-                <span class="badge badge-primary badge-pill" style:"color:black;">${time}</span></li>`
+                <span class="badge rounded-pill bg-primary" style:"color:black;">${time}</span>
+            </li>`
 
                         $('#items').append(mystr);
                     }

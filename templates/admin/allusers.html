@@ -1,0 +1,46 @@
+{% extends 'admin/admin_nav.html' %}
+
+
+{% block body %}
+<div class="container">
+    <h2 class="text-center my-3 text-primary">Our Service Providers</h2>
+    <hr>
+    {% include '../messages.html' %}
+    <div class="row">
+
+        {% for i in users %}
+
+        <div class="col-md-4 col-sm-6">
+            <div class="card card-body my-2">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div>
+
+                            <img src="{{i.image.url}}" class="image-thumbnail w-75 m-auto" alt="Photos">
+                            
+                        </div>
+                        <div class="mt-5">
+                            <a href="{% url 'deleteUser' i.id %}" class="m-1">
+                                <button class="btn btn-danger" onclick="return confirm('Do you want to delete this item?')">
+                                    Delete
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <h3>{{i.user.first_name}} {{i.user.last_name}}</h3>
+                        <p>Username: @{{i.user.username}}</p>
+                        <p>Email: {{i.user.email}}</p>
+                        <p>Address: {{i.address}}</p>
+                        <p>Contact: {{i.phone}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

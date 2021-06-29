@@ -26,13 +26,19 @@ urlpatterns = [
     path('user_profile/', views.user_profile, name='user_profile'),
     path('profile/', views.profile, name='profile'),
 
+    
+    # Admin Panel
     path('admin_home/', views.admin_home, name= 'admin_home'),
-    
-    
+    path('dashboard/', views.dashboard, name= 'dashboard'),
+    path('all_services/', views.allServices, name= 'allservices'),
+    path('all_users/', views.allUsers, name= 'allusers'),
+    path('all_customers/', views.allCustomers, name= 'allcustomers'),
+    path('feedback/', views.feedback, name='feedback'),
+
     # CRUD function
+    path('editservices/<int:pid>', views.editServices, name= 'editservices'),
     path('deleteService/<int:myid>', views.deleteService, name='deleteService'),
     path('deleteCustomer/<int:myid>', views.deleteCustomer, name='deleteCustomer'),
     path('deleteUser/<int:myid>', views.deleteUser, name='deleteUser'),
-
 
 ]

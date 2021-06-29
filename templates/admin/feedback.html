@@ -1,0 +1,42 @@
+{% extends 'admin/admin_nav.html' %}
+{% block css%}
+<style>
+    .container {
+        height: 75vh;
+    }
+</style>
+{% endblock css %}
+
+{% block body %}
+<div class="container my-4">
+    <h2 class="text-center text-primary">Feedbacks</h2>
+    <hr>
+    <div>
+        <table class="table table-hover">
+            <thead class="table-dark text-white">
+                <tr>
+                    <th scope="col">S.No</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Phone Number</th>
+                    <th scope="col">Issue</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in msg %}
+                <tr>
+                    <th scope="row">{{forloop.counter}}</th>
+                    <td>{{i.name}}</td>
+                    <td>{{i.email}}</td>
+                    <td>{{i.phone}}</td>
+                    <td>{{i.content}}</td>
+                </tr>
+                {% endfor %}
+                <caption>*From Contact Form of GharSewa</caption>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
