@@ -2,18 +2,21 @@
 
 {% block css %}
 <style>
-    .first{
+    .first {
         background: linear-gradient(to right, rgb(247, 110, 69), rgb(214, 174, 174));
     }
-    .second{
+
+    .second {
         background: linear-gradient(to right, rgb(57, 243, 113), rgb(141, 231, 164));
 
     }
-    .third{
+
+    .third {
         background: linear-gradient(to right, rgb(74, 76, 233), rgb(163, 158, 236));
 
     }
-    .container{
+
+    .container {
         height: 76vh;
     }
 </style>
@@ -29,8 +32,8 @@
                 <div class="card-body row justify-content-center align-items-center">
 
                     <div class="col-md-8">
-                        <h3>Total Services</h3>
-                        <h4>Users</h4>
+                        <h3>Services</h3>
+                        <h4>Total: {{services}}</h4>
                     </div>
                     <div class="col-md-4">
                         <i style="border-radius:50%;font-size:54px;color:rgb(0, 0, 0);padding:18px; opacity:0.7;"
@@ -39,8 +42,8 @@
 
                 </div>
                 <hr>
-                <h5 class="text-center"><a href="#" class="card-box-footer text-dark">View More <i
-                        class="fa fa-arrow-circle-right"></i></a></h5>
+                <h5 class="text-center"><a href="{% url 'allservices' %}" class="card-box-footer text-dark">View More <i
+                            class="fa fa-arrow-circle-right"></i></a></h5>
 
             </div>
         </div>
@@ -50,8 +53,8 @@
                 <div class="card-body row justify-content-center align-items-center">
 
                     <div class="col-md-8">
-                        <h3>Total Customer</h3>
-                        <h4>count</h4>
+                        <h3>Customers</h3>
+                        <h4>Total: {{customers}}</h4>
                     </div>
                     <div class="col-md-4">
                         <i style="border-radius:50%;font-size:54px;color:rgb(0, 0, 0);padding:18px; opacity:0.7;"
@@ -60,8 +63,8 @@
 
                 </div>
                 <hr>
-                <h5 class="text-center"><a href="#" class="card-box-footer text-dark">View More <i
-                        class="fa fa-arrow-circle-right"></i></a></h5>
+                <h5 class="text-center"><a href="{% url 'allcustomers' %}" class="card-box-footer text-dark">View More <i
+                            class="fa fa-arrow-circle-right"></i></a></h5>
 
             </div>
         </div>
@@ -71,8 +74,9 @@
                 <div class="card-body row justify-content-center align-items-center">
 
                     <div class="col-md-8">
-                        <h3>Total Service Providers</h3>
-                        <h4>count</h4>
+                        <h3>Service Providers</h3>
+                        <h4>Total: {{users}}</h4>
+
                     </div>
                     <div class="col-md-4">
                         <i style="border-radius:50%;font-size:54px;color:rgb(0, 0, 0);padding:18px; opacity:0.7;"
@@ -81,14 +85,14 @@
 
                 </div>
                 <hr>
-                <h5 class="text-center"><a href="#" class="card-box-footer text-dark">View More <i
-                        class="fa fa-arrow-circle-right"></i></a></h5>
+                <h5 class="text-center"><a href="{% url 'allusers' %}" class="card-box-footer text-dark">View More
+                        <i class="fa fa-arrow-circle-right"></i></a></h5>
 
             </div>
         </div>
     </div>
 
-   
+
 
 
 </div>

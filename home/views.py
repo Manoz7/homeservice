@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -359,7 +360,13 @@ def admin_home(request):
 
 
 def dashboard(request):
-    return render(request, 'admin/dashboard.html')
+    services = Service.objects.all().count()
+    users = Service_Man.objects.all().count()
+    customers = Customer.objects.all().count()
+
+    context = {'services':services, 'users':users, 'customers':customers}
+
+    return render(request, 'admin/dashboard.html', context)
 
 
 def allServices(request):
@@ -441,3 +448,52 @@ def feedback(request):
     msg = Contact.objects.all()
     
     return render(request, 'admin/feedback.html', {'msg': msg})
+
+def adminProfile(request):
+    if request.user.is_staff:
+        user = request.user
+        profile = User.objects.get(username=user)
+        print(profile)
+    return render(request, 'admin/admin_profile.html', {'profile': profile})
+
+def editAdmin(request, pid):
+    
+    user = User.objects.get(username=request.user)
+    edit = 'profile'
+    if request.method == 'POST':
+        username = request.POST['admin_username']
+        email = request.POST['admin_email']
+        fname = request.POST['a_fname']
+        lname = request.POST['a_lname']
+
+        user.username = username
+        user.email =email
+        user.first_name = fname
+        user.last_name = lname
+        # print(user.username, user.email, user.first_name, user.last_name)
+        user.save()
+        messages.info(request, 'Profile Updated!')
+        return redirect('admin_profile')
+
+    return render(request, 'admin/edit_admin.html', {'user': user, 'edit': edit})
+
+def changeAdminpass(request, pid):
+    user = User.objects.get(username=request.user)
+    edit = 'pass'
+    if request.method == 'POST': 
+        old_password = request.POST['pw']
+        new_password = request.POST['pw1']
+        again_password = request.POST['pw2']
+
+        if user.check_password(old_password) == True: #Check the old password
+            if new_password == again_password:
+                user.set_password(new_password) #Change the new password
+                user.save()
+                messages.success(request, 'Password changed successfully! Please Login Again!!')
+                return redirect('index')
+        else:
+            messages.error(request, "Password donot match!!")
+            return HttpResponseRedirect("")
+        
+    return render(request, 'admin/edit_admin.html', {'user': user, 'edit': edit})
+                   

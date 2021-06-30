@@ -34,6 +34,10 @@ urlpatterns = [
     path('all_users/', views.allUsers, name= 'allusers'),
     path('all_customers/', views.allCustomers, name= 'allcustomers'),
     path('feedback/', views.feedback, name='feedback'),
+    
+    path('admin_profile/', views.adminProfile, name= 'admin_profile'),
+    path('edit_admin/<int:pid>', views.editAdmin, name= 'edit_admin'),
+    path('changeadminpass/<int:pid>', views.changeAdminpass, name= 'changeadminpass'),
 
     # CRUD function
     path('editservices/<int:pid>', views.editServices, name= 'editservices'),

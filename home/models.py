@@ -4,7 +4,6 @@ from django.db.models.deletion import CASCADE, SET_NULL
 
 from django.contrib.auth.models import User
 
-
 class Contact(models.Model):
     sno = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
@@ -22,7 +21,6 @@ class Status(models.Model):
 
     def __str__(self):
         return self.status
-
 
 class Customer(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)

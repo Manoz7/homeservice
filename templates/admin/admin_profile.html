@@ -1,0 +1,55 @@
+{% extends 'admin/admin_nav.html' %}
+
+{% block css%}
+<style>
+    .container{
+        height: 78vh;
+    }
+</style>
+{% endblock css %}
+
+{% block body %}
+<div class="container profile-box w-50 my-3">
+    <h2 class="text-center text-danger">My Profile</h2>
+    <p class="text-end">*Admin Profile</p>
+    <hr>
+    {% include 'messages.html' %}
+    <div align=" left" class="container-fluid" style="width:80%;margin-bottom:5%">
+        <hr>
+        <div class="row">
+            <div class="col-md-6 div2">
+                <strong>Full Name:</strong>
+            </div>
+            <div class="col-md-6 div1">
+                {{profile.first_name}} {{profile.last_name}}
+            </div>
+        </div>
+        <hr>
+
+        <div class="row">
+            <div class="col-md-6 div2">
+                <strong>Username :</strong>
+            </div>
+            <div class="col-md-6 div1">
+                {{profile.username}}
+            </div>
+        </div>
+        <hr>
+
+        <div class="row">
+            <div class="col-md-6 div2">
+                <strong>Email Id :</strong>
+            </div>
+            <div class="col-md-6 div1">
+                {{profile.email}}
+            </div>
+        </div>
+        <hr>
+
+        
+        <a href="{% url 'edit_admin' profile.id %}" class="btn btn-outline-primary">Edit Profile</a>
+        <a href="{% url 'changeadminpass' profile.id %}" class="btn btn-outline-danger">Change Password</a>
+
+    </div>
+</div>
+{% endblock %}

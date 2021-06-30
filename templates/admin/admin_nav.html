@@ -84,7 +84,7 @@
         <!-- Sidebar-->
         <div class="border-end bg-white overflow-hidden" id="sidebar-wrapper">
             <div class="sidebar-heading border-bottom bg-dark text-white">
-                GharSewa
+                <a href="{% url 'index' %}" class="text-white text-uppercase text-decoration-none"> GharSewa </a>
             </div>
             <div class="list-group list-group-flush bg-dark">
                 <a class="list-group-item list-group-item-action list-group-item-dark p-3" href="{% url 'dashboard' %}">
@@ -147,7 +147,7 @@
                                     Welcome {{request.user}}
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="#!">Profile</a>
+                                    <a class="dropdown-item" href="{% url 'admin_profile' %}">Profile</a>
 
                                     <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
                                     <div class="dropdown-divider">
