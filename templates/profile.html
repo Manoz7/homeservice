@@ -3,6 +3,9 @@
 {% block title %} User Profile {% endblock title %}
 {% block css %}
 <style>
+    .container{
+        min-height: 80vh;
+    }
     .image-thumbnail {
         display: block;
         max-width: 200px;
@@ -25,27 +28,30 @@
     .profile-box {
         border: 1px solid grey;
         border-radius: 2%;
-
     }
 
     .profile-box h2 {
         font-weight: bold;
         font-family: 'Monotype Corsiva';
         color: #E6120E;
-        margin-top: 5%;
         text-align: center;
 
     }
 </style>
 {% endblock css %}
+
 {% block body %}
 
 
-<div class="container profile-box w-50 my-3 cover-height">
+<div class="container profile-box w-50 my-3">
     <h2>My Profile</h2>
     <hr>
 
     <div align=" left" class="container-fluid" style="width:80%;margin-bottom:5%">
+        <div class="row justify-content-center">
+            
+                <img src="{{profile.image.url}}" style="width:150px;height:100px"></img>
+        </div>
         <hr>
         <div class="row">
             <div class="col-md-6 div2">
@@ -57,15 +63,7 @@
         </div>
         <hr>
 
-        <div class="row">
-            <div class="col-md-6 div2">
-                <strong>Image:</strong>
-            </div>
-            <div class="col-md-6">
-                <img src="{{profile.image.url}}" style="width:150px;height:130px"></img>
-            </div>
-        </div>
-        <hr>
+        
 
         <div class="row">
             <div class="col-md-6 div2">
@@ -86,7 +84,6 @@
             </div>
         </div>
         <hr>
-
         <div class="row">
             <div class="col-md-6 div2">
                 <strong>Address :</strong>
@@ -96,7 +93,40 @@
             </div>
         </div>
         <hr>
-        <a href="#" class="btn btn-outline-primary">Edit Profile</a>
+        {% if page %}
+        <div class="row">
+            <div class="col-md-6 div2">
+                <strong>Service :</strong>
+            </div>
+            <div class="col-md-6 div1">
+                {{profile.service.service_name}}
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-6 div2">
+                <strong>Work Location :</strong>
+            </div>
+            <div class="col-md-6 div1">
+                {{profile.city.city}}
+            </div>
+        </div>
+        <hr>
+
+        <div class="row">
+            <div class="col-md-6 div2">
+                <strong>Work Experience :</strong>
+            </div>
+            <div class="col-md-6 div1">
+                {{profile.experience}} years
+            </div>
+        </div>
+        <hr>
+
+        
+        {% endif %}
+       
+        <a href="{% url 'editprofile' %}" class="btn btn-outline-primary">Edit Profile</a>
 </div>
 </div>
 

@@ -2,15 +2,27 @@
 
 {% block css%}
 <style>
-    .container{
+    .container {
         height: 78vh;
+    }
+    .profile-box {
+        border: 1px solid grey;
+        border-radius: 2%;
+    }
+
+    .profile-box h2 {
+        font-weight: bold;
+        font-family: 'Monotype Corsiva';
+        color: #E6120E;
+        text-align: center;
+
     }
 </style>
 {% endblock css %}
 
 {% block body %}
 <div class="container profile-box w-50 my-3">
-    <h2 class="text-center text-danger">My Profile</h2>
+    <h2 class="text-center text-danger mt-3">My Profile</h2>
     <p class="text-end">*Admin Profile</p>
     <hr>
     {% include 'messages.html' %}
@@ -46,7 +58,7 @@
         </div>
         <hr>
 
-        
+
         <a href="{% url 'edit_admin' profile.id %}" class="btn btn-outline-primary">Edit Profile</a>
         <a href="{% url 'changeadminpass' profile.id %}" class="btn btn-outline-danger">Change Password</a>
 

@@ -35,11 +35,7 @@
                 <h1 class="text-center serv">Services offered: </h1>
 
             </div>
-            {% if user.is_authenticated %}
-            <div class="col-md-2">
-                <a href="{% url 'add_service' %}" class="btn btn-outline-primary">Add Service</a>
-            </div>
-            {% endif %}
+            
         </div>
     </div>
     <div class="main-box container">
@@ -54,13 +50,7 @@
                         <h5 class="card-title">{{i.service_name}}</h5>
                         <p class="card-text">{{i.service_desc|truncatechars:80}}</p>
                         <a href="/services/{{i.service_id}}" class="btn btn-primary">Quick View</a>
-                        {% if user.is_authenticated %}
-                        <a href="/book_service/" class="btn btn-primary">Book Now</a>
-
-                        {% else %}
-                        <button href="#" class="btn btn-primary" disabled>Login To Book</button>
-                        {% endif %}
-
+                        
                     </div>
                 </div>
             </div>

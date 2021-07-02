@@ -2,7 +2,11 @@
 {% block title %} {{service.service_name}} {% endblock title %}
 
 {% block css %}
-
+<style>
+    .container{
+        min-height: 75vh;
+    }
+</style>
 {% endblock css %}
 
 {% block body %}
@@ -10,69 +14,63 @@
 
 
     <div class="container mt-5">
-
         <div class="row">
-
             <div class="col-md-4">
 
-                <div class="row">
-                    <img src='/media/{{service.image}}' class="card-img-top" width="233px" height="295px">
+                <div class="card">
 
-                </div>
-                <div class="row mt-3 mx-3">
-                    {% if user.is_authenticated %}
+                    <div class="card-header"><h3 class="text-center">{{ service.service_name }}</h3></div>
 
-                    <a href="/book_service/" class="btn btn-primary">Book Now</a>
-                    {% else %}
-                    <button href="#" class="btn btn-primary" disabled>Login To Book</button>
-                    {% endif %}
-                </div>
-            </div>
-
-            <div class="col-md-8 p-5">
-                <h4>{{ service.service_name }}</h4>
-                <!-- <h6>{{product.category}}, {{product.subcategory}}</h6> -->
-                <!-- <p><b>Rs. {{ product.price }}</b></p> -->
-                <p>{{ service.service_desc }}</p>
-            </div>
-
-        </div>
-
-        <div class="my-3">
-            <h3>Available Users:: (Any One will contact you)</h3>
-
-            <div class="row mt-2">
-
-                {% for user in users %}
-                <div class="col-md-6">
-                    <div class="card card-body my-2">
+                    <div class="card-body">
                         <div class="row">
-                            <div class="col-md-4">
-                                <div>
+                            <div class="col-md-6">
+                                <img src='/media/{{service.image}}' class="card-img-top" width="233px" height="80%">
 
+                            </div>
+                            <div class="col-md-6">
+                                <p>{{ service.service_desc }}</p>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <h3>Available Users:: (Any One will contact you)</h3>
+
+                <div class="row mt-2">
+
+                    {% for user in users %}
+                    <div class="col-md-6">
+                        <div class="card card-body my-2">
+                            <div class="row">
+                                <div class="col-md-4">
                                     <img src="{{user.image.url}}" class="image-thumbnail w-75 m-auto" alt="Photos">
                                     <p class="text-center">@{{user.user.username}}</p>
                                 </div>
-                                
-                            </div>
-                            <div class="col-md-8">
-                                <h3>{{user.user.first_name}} {{user.user.last_name}}</h3>
-                                <p>Email: {{user.user.email}}</p>
-                                <p>Address: {{user.address}}</p>
-                                <p>Contact: {{user.phone}}</p>
-                                <p>Service: {{user.service.service_name}}</p>
+                                <div class="col-md-8">
+                                    <h3>{{user.user.first_name}} {{user.user.last_name}}</h3>
+                                    <p>Email: {{user.user.email}}</p>
+                                    <p>Address: {{user.city.city}}</p>
+                                    <p>Contact: {{user.phone}}</p>
+                                    <p>Experience: {{user.experience}} years</p>
+                                    <a href="{% url 'booking' user.user.id %}" class="btn btn-primary">Book Now</a>
+
+
+                                </div>
                             </div>
                         </div>
                     </div>
+
+
+                    {% endfor %}
+
                 </div>
-
-
-                {% endfor %}
-
             </div>
         </div>
-
     </div>
+
 </div>
 
 {% endblock body %}
