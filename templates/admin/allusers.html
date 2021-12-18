@@ -1,11 +1,19 @@
 {% extends 'admin/admin_nav.html' %}
-
+{% block css %}
+<style>
+    a{
+        text-decoration: none;
+    }
+</style>
+{% endblock %}
 
 {% block body %}
 <div class="container">
     <h2 class="text-center my-3 text-primary">Our Service Providers</h2>
+    
     <hr>
     {% include '../messages.html' %}
+
     <div class="row">
 
         {% for i in users %}
@@ -16,15 +24,38 @@
                     <div class="col-md-4">
                         <div>
 
-                            <img src="{{i.image.url}}" class="image-thumbnail w-75 m-auto" alt="Photos">
-                            
+                            <img src="{{i.image.url}}" class="image-thumbnail w-75 m-auto rounded-circle" alt="Photos">
+
                         </div>
-                        <div class="mt-5">
+                        <div class="my-4">
+                                <a href="/media/service_man/certificate.png"><img src="{{i.cert.url}}" class="image-thumbnail w-75 m-auto" alt="Photos" onclick="change1()"></a>
+                        </div>
+
+                        <div>
+                            {% if i.status.status == 'Accept' %}
                             <a href="{% url 'deleteUser' i.id %}" class="m-1">
-                                <button class="btn btn-danger" onclick="return confirm('Do you want to delete this item?')">
+                                <button class="btn btn-danger"
+                                    onclick="return confirm('Do you want to delete this item?')">
                                     Delete
                                 </button>
                             </a>
+                            {%endif %}
+                            {% if i.status.status == 'pending' %}
+                            <a href="{% url 'acceptUser' i.id %}" class="m-1">
+                                <button class="btn btn-success"
+                                    onclick="return confirm('Do you want to accept this user?')">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                            </a>
+                            <a href="{% url 'deleteUser' i.id %}" class="m-1">
+                                <button class="btn btn-danger"
+                                    onclick="return confirm('Do you want to delete this item?')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </a>
+                            {% endif %}
+
+
                         </div>
                     </div>
                     <div class="col-md-8">
@@ -33,6 +64,10 @@
                         <p>Email: {{i.user.email}}</p>
                         <p>Address: {{i.address}}</p>
                         <p>Contact: {{i.phone}}</p>
+                        <p>Experience: {{i.experience}} years</p>
+                        <p>Status: {{i.status.status}}</p>
+                        <p>Date Joined: {{i.date_joined}} </p>
+
                     </div>
                 </div>
             </div>
@@ -43,4 +78,11 @@
     </div>
 </div>
 
+{% endblock %}
+{% block js %}
+<script>
+    function change1(){
+        document.getElementById('image') = '/media/images/certificate.png';
+    }
+</script>
 {% endblock %}

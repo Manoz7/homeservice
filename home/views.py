@@ -22,8 +22,10 @@ def index(request):
     services = Service.objects.all()
     return render(request, 'index.html', {'services': services})
 
+
 def error(request):
     return render(request, 'error.html')
+
 
 def notification():
     status = Status.objects.get(status='pending')
@@ -71,17 +73,43 @@ def handleLogin(request):
         password = request.POST.get('loginpass')
 
         user = authenticate(request, username=username, password=password)
+        sign=''
+        
+        
 
         if user is not None:
-            login(request, user)
-            if user.is_staff:
-                messages.success(request, 'User login successfully!')
-                return redirect('dashboard')
-            else:
-                # print(user)
+            
+            try:
+                sign = Customer.objects.get(user=user)
+            except:
+                pass
+                
+            if sign:
+                login(request, user)
                 messages.success(request, 'User login successfully!')
                 return redirect('index')
-
+            
+            
+            else:
+                stat = Status.objects.get(status = 'Accept')
+                ser = False
+                try:
+                    ser = Service_Man.objects.get(status= stat, user=user)
+                
+                except:
+                    pass
+                
+                if ser:
+                    login(request, user)
+                    messages.success(request, 'User login successfully!')
+                    return redirect('index')
+                
+                else:
+                    messages.error(request, 'Either your request is pending or you arenot a Member')
+                    return redirect('login')
+            
+            
+                
         else:
             messages.error(
                 request, 'Username and password does not match!! Please enter right credential!')
@@ -89,6 +117,35 @@ def handleLogin(request):
 
     context = {'page': page}
     return render(request, 'login_register.html', context)
+
+def admin_login(request):
+    page = 'admin_login'
+    if request.user.is_authenticated:
+        messages.info(request, 'You are already logged in!!')
+        return redirect('index')
+
+    if request.method == 'POST':
+        username = request.POST.get('logusername')
+        password = request.POST.get('logpass')
+
+        user = authenticate(request, username=username, password=password)
+        
+        if user is not None:
+            
+            login(request, user)
+            if user.is_staff:
+                return redirect('dashboard')
+            else:
+                return redirect('error')
+        
+        else:
+            messages.error(
+                request, 'Username and password does not match!! Please enter right credential!')
+            return redirect('login')
+    else:
+        context = {'page': page}
+        return render(request, 'login_register.html', context)
+        
 
 
 def admin_register(request):
@@ -109,8 +166,8 @@ def admin_register(request):
         ), email=email, password=password1, first_name=fname, last_name=lname)
         user.save()
 
-        login(request, user)
-        return redirect('admin_home')
+        messages.success(request, 'Your user account has been created!! Please Login!')
+        return redirect('login')
 
     context = {'page': page}
     return render(request, 'login_register.html', context)
@@ -127,20 +184,31 @@ def user_register(request):
     if request.method == 'POST':
         data = request.POST
         image = request.FILES.get('image')
+        cert = request.FILES.get('cert')
 
         # Create the user
+        if User.objects.filter(username=data['user_username']).exists():
+            messages.error(request, 'Username Already Exists.')
 
-        user = User.objects.create_user(username=data['user_username'].lower(
-        ), email=data['user_email'], password=data['user_pass1'], first_name=data['user_fname'], last_name=data['user_lname'])
-        user.save()
+        elif User.objects.filter(email=data['user_email']).exists():
+            messages.error(request, 'Email Already Exists.')
+        
+        elif data['user_pass1'] != data['user_pass2']:
+            messages.error(request, 'Passwords donot match with each other!!')
+        
+        
+        else:
+            user = User.objects.create_user(username=data['user_username'].lower(), email=data['user_email'], password=data['user_pass1'], first_name=data['user_fname'], last_name=data['user_lname'])
+            user.save()
 
-        service = Service.objects.get(service_id=data['service'])
-        city = City.objects.get(id=data['city'])
+            service = Service.objects.get(service_id=data['service'])
+            city = City.objects.get(id=data['city'])
 
-        Service_Man.objects.create(
-            user=user, image=image, phone=data['user_phone'], address=data['user_address'], service=service, city=city, experience=data['exp'])
-        login(request, user)
-        return redirect("/")
+            stat = Status.objects.get(status='pending')
+            Service_Man.objects.create(
+                user=user, image=image, cert=cert, phone=data['user_phone'], address=data['user_address'], service=service, city=city, experience=data['exp'], status=stat)
+            messages.success(request, 'Your user account has been created!! Please Login!')
+            return redirect('login')
 
     context = {'page': page, 'services': services, 'city': city}
     return render(request, 'login_register.html', context)
@@ -156,14 +224,24 @@ def customer_register(request):
         image = request.FILES.get('c_image')
 
         # Create the user
-        customer = User.objects.create_user(
-            data['customer_username'].lower(), data['customer_email'], data['customer_pass1'], first_name=data['customer_fname'], last_name=data['customer_lname'])
-        customer.save()
+        if User.objects.filter(username=data['customer_username']).exists():
+            messages.error(request, 'Username Already Exists.')
 
-        Customer.objects.create(user=customer,  image=image,
-                                phone=data['customer_phone'], address=data['customer_address'])
-        login(request, customer)
-        return redirect("/")
+        elif User.objects.filter(email=data['customer_email']).exists():
+            messages.error(request, 'Email Already Exists.')
+
+        elif data['customer_pass1'] != data['customer_pass2']:
+            messages.error(request, 'Passwords donot match with each other!!')
+        
+        else:
+            customer = User.objects.create_user(
+                data['customer_username'].lower(), data['customer_email'], data['customer_pass1'], first_name=data['customer_fname'], last_name=data['customer_lname'])
+            customer.save()
+
+            Customer.objects.create(user=customer,  image=image,
+                                    phone=data['customer_phone'], address=data['customer_address'])
+            messages.success(request, 'Your user account has been created!! Please Login!')
+            return redirect('login')
 
     context = {'page': page}
     return render(request, 'login_register.html', context)
@@ -195,6 +273,9 @@ def serviceView(request, myid):
 
 @login_required(login_url='login')
 def addService(request):
+    if not request.user.is_staff:
+        return redirect('error')
+
     if request.method == 'POST':
         data = request.POST
         image = request.FILES.get('image')
@@ -230,141 +311,49 @@ def profile(request):
 
 
 @login_required(login_url='login')
-def book_service(request):
-    # service = Service.objects.filter()[0]
-
-    if request.method == 'POST':
-        itemsJson = request.POST['itemsJson']
-        name = request.POST['name']
-        email = request.POST['email']
-        address = request.POST['address']
-        phone = request.POST['phone']
-        issue = request.POST['message']
-
-        book = BookService(items_json=itemsJson, name=name, email=email,
-                           address=address, phone=phone, book_desc=issue)
-
-        book.save()
-
-        update = BookUpdate(
-            book_id=book.book_id, update_desc="Your Service has been in Notice. We will call you as soon as possible!!")
-
-        update.save()
-
-        thank = True
-        id = book.book_id
-
-        context = {'thank': thank, 'id': id}
-
-        return render(request, 'book_service.html', context)
-
-    # context = {'service': service}
-
-    return render(request, 'book_service.html')
-    # return render(request, 'book_service.html', context)
-
-
-@login_required(login_url='login')
-def tracker(request):
-    if request.method == "POST":
-        bookId = request.POST.get('bookId', '')
-        email = request.POST.get('email', '')
-
-        try:
-            book = BookService.objects.filter(book_id=bookId, email=email)
-
-            if len(book) > 0:
-                update = BookUpdate.objects.filter(book_id=bookId)
-                updates = []
-
-                for item in update:
-                    updates.append(
-                        {'text': item.update_desc, 'time': item.timestamp})
-
-                    response = json.dumps(
-                        {'status': 'success', 'updates': updates, 'itemsJson': book[0].items_json}, default=str)
-
-                return HttpResponse(response)
-            else:
-                return HttpResponse('{"status": "noitem"}')
-
-        except Exception as e:
-            print(e)
-            return HttpResponse('{"status": "error"}')
-
-    return render(request, 'tracker.html')
-
-
-@login_required(login_url='login')
-def user_profile(request):
-    if request.user.is_staff:
-
-        category = request.GET.get('category')
-
-        if category == None:
-            services = Service.objects.all()
-            count = services.count()
-            category = 'Total Services Offered'
-
-            return render(request, 'user_profile.html', {'services': services, 'count': count, 'category': category},)
-
-        elif category == 'users':
-            users = Service_Man.objects.all()
-            count = users.count()
-            category = 'Total Service-Man'
-
-            return render(request, 'user_profile.html', {'users': users, 'count': count, 'category': category})
-
-        elif category == 'customer':
-            customers = Customer.objects.all()
-            count = customers.count()
-
-            category = "Total Customers"
-            return render(request, 'user_profile.html', {'customers': customers, 'count': count, 'category': category})
-
-        else:
-
-            return render(request, 'user_profile.html')
-
-    else:
-        return HttpResponse('Error')
-
-
-@login_required(login_url='login')
-def admin_home(request):
-    if request.user.is_staff:
-        services = Service.objects.all()
-        users = Service_Man.objects.all()
-        customers = Customer.objects.all()
-
-        total_services = services.count()
-        total_users = users.count()
-        total_customers = customers.count()
-
-        context = {'services': services, 'users': users, 'customers': customers,
-                   'total_services': total_services, 'total_users': total_users, 'total_customers': total_customers}
-
-        return render(request, 'admin_home.html', context)
-    else:
-        return redirect('index')
-
-@login_required(login_url='login')
 def dashboard(request):
+    dic = notification()
     services = Service.objects.all().count()
     users = Service_Man.objects.all().count()
     customers = Customer.objects.all().count()
 
-    context = {'services': services, 'users': users, 'customers': customers}
+    status = Status.objects.get(status='pending')
+    new = Service_Man.objects.filter(status=status)
+    count=0
+    for i in new:
+        count+=1
+    
+    cus = Customer.objects.all()
+    ser = Service_Man.objects.all()
+    cat = Service.objects.all()
+    count1=0
+    count2=0
+    count3=0
+    for i in cus:
+        count1+=1
+    for i in ser:
+        count2+=1
+    for i in cat:
+        count3+=1
+        
+    context = {'count':dic['count'],'new':dic['new'], 'customer':count1, 'service_man':count2, 'service':count3, 'services': services, 'users': users, 'customers': customers}
+    return render(request,'admin/dashboard.html',context)
 
-    return render(request, 'admin/dashboard.html', context)
 
 @login_required(login_url='login')
 def allServices(request):
+    if not request.user.is_staff:
+        return redirect('error')
+
     services = Service.objects.all()
     return render(request, 'admin/allservices.html', {'services': services})
 
+
 @login_required(login_url='login')
 def editServices(request, pid):
+    if not request.user.is_staff:
+        return redirect('error')
+
     ser = Service.objects.get(service_id=pid)
 
     if request.method == 'POST':
@@ -384,8 +373,11 @@ def editServices(request, pid):
 
     return render(request, 'admin/edit_services.html', {'ser': ser})
 
+
 @login_required(login_url='login')
 def deleteService(request, myid):
+    if not request.user.is_staff:
+        return redirect('error')
 
     service = Service.objects.get(service_id=myid)
     print(service.service_name)
@@ -394,14 +386,21 @@ def deleteService(request, myid):
     messages.success(request, 'Service Deleted!')
     return redirect('allservices')
 
+
 @login_required(login_url='login')
 def allUsers(request):
-    users = Service_Man.objects.all()
+    if not request.user.is_staff:
+        return redirect('error')
 
+    users = Service_Man.objects.all().order_by('-status')
+    
     return render(request, 'admin/allusers.html', {'users': users})
+
 
 @login_required(login_url='login')
 def deleteUser(request, myid):
+    if not request.user.is_staff:
+        return redirect('error')
 
     users = Service_Man.objects.get(id=myid)
     user = User.objects.get(username=users)
@@ -415,13 +414,31 @@ def deleteUser(request, myid):
     return redirect('allusers')
 
 @login_required(login_url='login')
+def acceptUser(request, myid):
+    user = Service_Man.objects.get(id=myid)
+    
+    stat = Status.objects.get(status='Accept')
+
+    user.status = stat
+    user.save()
+    return redirect('allusers')
+
+    
+
+@login_required(login_url='login')
 def allCustomers(request):
+    if not request.user.is_staff:
+        return redirect('error')
+
     customers = Customer.objects.all()
 
     return render(request, 'admin/allcustomers.html', {'customers': customers})
 
+
 @login_required(login_url='login')
 def deleteCustomer(request, myid):
+    if not request.user.is_staff:
+        return redirect('error')
 
     customer = Customer.objects.get(id=myid)
     user = User.objects.get(username=customer)
@@ -434,22 +451,44 @@ def deleteCustomer(request, myid):
     messages.success(request, 'Customer Deleted!')
     return redirect('allcustomers')
 
+
 @login_required(login_url='login')
 def feedback(request):
+    if not request.user.is_staff:
+        return redirect('error')
+
     msg = Contact.objects.all()
 
     return render(request, 'admin/feedback.html', {'msg': msg})
 
+
+@login_required(login_url='login')
+def deleteFeedback(request, myid):
+    if not request.user.is_staff:
+        return redirect('error')
+
+    msg = Contact.objects.get(sno=myid)
+    msg.delete()
+    
+    messages.success(request, 'Feedback deleted successfully!')
+
+    return redirect('feedback')
+
+
 @login_required(login_url='login')
 def adminProfile(request):
+
     if request.user.is_staff:
         user = request.user
         profile = User.objects.get(username=user)
         print(profile)
     return render(request, 'admin/admin_profile.html', {'profile': profile})
 
+
 @login_required(login_url='login')
 def editAdmin(request, pid):
+    if not request.user.is_staff:
+        return redirect('error')
 
     user = User.objects.get(username=request.user)
     edit = 'profile'
@@ -470,8 +509,12 @@ def editAdmin(request, pid):
 
     return render(request, 'admin/edit_admin.html', {'user': user, 'edit': edit})
 
+
 @login_required(login_url='login')
 def changeAdminpass(request, pid):
+    if not request.user.is_staff:
+        return redirect('error')
+
     user = User.objects.get(username=request.user)
     edit = 'pass'
     if request.method == 'POST':
@@ -555,7 +598,8 @@ def customerBooking(request, pid):
     try:
         customer = Customer.objects.get(user=request.user)
     except:
-        pass
+        messages.error(request, 'You must be customer to book a service!!')
+        return redirect('services')
 
     u = User.objects.get(id=pid)
     serv = Service_Man.objects.get(user=u)
@@ -565,19 +609,22 @@ def customerBooking(request, pid):
         status = Status.objects.get(status="pending")
         book = Booking.objects.create(status=status, user=serv, customer=customer,
                                       book_date=data['date'], book_days=data['day'], book_hours=data['hour'])
-        
+
         return redirect('booking_details')
 
-    return render(request, 'booking.html', {'serv': serv, 'customer':customer})
+    return render(request, 'booking.html', {'serv': serv, 'customer': customer})
 
 # Customer Booking Details
+
+
 @login_required(login_url='login')
 def bookingDetails(request):
     page = True
     user = User.objects.get(id=request.user.id)
     try:
         customer = Customer.objects.get(user=user)
-        books = Booking.objects.filter(customer=customer).order_by('-book_date')
+        books = Booking.objects.filter(
+            customer=customer).order_by('-book_date')
 
     except:
         return redirect('user_booking')
@@ -595,6 +642,7 @@ def cancelBooking(request, pid):
 
 # Service Provider Cancelling Booking
 
+
 @login_required(login_url='login')
 def spcancelBooking(request, pid):
     ser = Booking.objects.get(id=pid)
@@ -608,7 +656,7 @@ def spcancelBooking(request, pid):
 @login_required(login_url='login')
 def bookingStatus(request, pid):
     book = Booking.objects.get(id=pid)
-
+    
     return render(request, 'booking_status.html', {'book': book})
 
 
@@ -629,6 +677,7 @@ def userBooking(request):
 
 # Booking Confirm View
 
+
 @login_required(login_url='login')
 def accept_confirmation(request, pid):
     ser = Booking.objects.get(id=pid)
@@ -637,17 +686,22 @@ def accept_confirmation(request, pid):
     ser.save()
     return redirect('booking_details')
 
-@login_required(login_url='login')
-def notification(request):
-    return render(request, 'notification.html')
+
 
 @login_required(login_url='login')
 def adminBooking(request):
+    if not request.user.is_staff:
+        return redirect('error')
+
     books = Booking.objects.all()
     return render(request, 'admin/admin_booking.html', {'books': books})
 
+
 @login_required(login_url='login')
 def adminCity(request):
+    if not request.user.is_staff:
+        return redirect('error')
+
     cities = City.objects.all()
 
     if request.method == 'POST':
@@ -655,16 +709,21 @@ def adminCity(request):
 
         if City.objects.filter(city=city).exists():
             messages.error(request, f'{city} already exists')
-            return HttpResponseRedirect('')
+            return redirect('city_list')
+
         else:
             City.objects.create(city=city)
             messages.success(request, f'{city} Added successfully')
-            return HttpResponseRedirect('')
+            return redirect('city_list')
 
     return render(request, 'admin/city_list.html', {'cities': cities})
 
+
 @login_required(login_url='login')
 def deleteCity(request, pid):
+    if not request.user.is_staff:
+        return redirect('error')
+
     city = City.objects.get(id=pid)
     city.delete()
     messages.success(request, f'{city} Deleted successfully')
@@ -695,12 +754,70 @@ def searchProvider(request):
     if request.method == 'POST':
         city = request.POST.get('city')
         service = request.POST.get('service')
-
+        
         users = Service_Man.objects.filter(city=city, service=service)
-
-        context = {'city': city, 'service': service,
+        
+        serv = Service.objects.get(service_id=service) #To get the service name
+        ct = City.objects.get(id=city) #To get the location
+        
+        context = {'ct': ct, 'serv': serv,
                    'users': users, 'page': page}
         return render(request, 'search.html', context)
 
     context = {'city': city, 'service': service, 'page': page}
     return render(request, 'search_sp.html', context)
+
+
+
+@login_required(login_url='login')
+def user_profile(request):
+    if request.user.is_staff:
+
+        category = request.GET.get('category')
+
+        if category == None:
+            services = Service.objects.all()
+            count = services.count()
+            category = 'Total Services Offered'
+
+            return render(request, 'user_profile.html', {'services': services, 'count': count, 'category': category},)
+
+        elif category == 'users':
+            users = Service_Man.objects.all()
+            count = users.count()
+            category = 'Total Service-Man'
+
+            return render(request, 'user_profile.html', {'users': users, 'count': count, 'category': category})
+
+        elif category == 'customer':
+            customers = Customer.objects.all()
+            count = customers.count()
+
+            category = "Total Customers"
+            return render(request, 'user_profile.html', {'customers': customers, 'count': count, 'category': category})
+
+        else:
+
+            return render(request, 'user_profile.html')
+
+    else:
+        return HttpResponse('Error')
+
+
+@login_required(login_url='login')
+def admin_home(request):
+    if request.user.is_staff:
+        services = Service.objects.all()
+        users = Service_Man.objects.all()
+        customers = Customer.objects.all()
+
+        total_services = services.count()
+        total_users = users.count()
+        total_customers = customers.count()
+
+        context = {'services': services, 'users': users, 'customers': customers,
+                   'total_services': total_services, 'total_users': total_users, 'total_customers': total_customers}
+
+        return render(request, 'admin_home.html', context)
+    else:
+        return redirect('error')

@@ -3,7 +3,7 @@ from .models import *
 # Register your models here.
 
 admin.site.register((Status,City, Booking))
-admin.site.register((Contact, Service, BookService, BookUpdate))
+admin.site.register((Contact, Service, BookUpdate))
 
 
 @admin.register(Customer, Service_Man)

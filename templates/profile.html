@@ -3,9 +3,11 @@
 {% block title %} User Profile {% endblock title %}
 {% block css %}
 <style>
-    .container{
+    /* .container{
         min-height: 80vh;
     }
+    */
+    
     .image-thumbnail {
         display: block;
         max-width: 200px;
@@ -119,6 +121,16 @@
             </div>
             <div class="col-md-6 div1">
                 {{profile.experience}} years
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-6 div2">
+                <strong>Training Certificate :</strong>
+            </div>
+            <div class="col-md-6 div1">
+                <img src="{{profile.cert.url}}" style="width:150px;height:100px"></img>
+
             </div>
         </div>
         <hr>

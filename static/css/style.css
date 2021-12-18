@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&family=Roboto+Slab:wght@300;400&display=swap");
 
+
 /* Bootstrap fonts */
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css");
 
@@ -28,11 +29,12 @@ img {
   display: block;
 }
 
+
 /* Navigation bar */
 
 /* header */
 .header {
-  height: 70vh;
+  height: 68vh;
   /* opacity: 0.7; */
 }
 
@@ -42,6 +44,7 @@ img {
   width: 100%;
   background: url("../img/banner.jpg") no-repeat center center/cover;
   z-index: -1;
+  top: 5vh;
   opacity: 0.8;
   height: 74vh;
 }
@@ -144,7 +147,6 @@ img {
   content: "";
   position: absolute;
   width: 100%;
-  top: -20px;
   left: 0;
   background: url("../img/contact1.jpg") no-repeat center center/cover;
   z-index: -1;
@@ -152,16 +154,6 @@ img {
   height: 100%;
 }
 
-/* Footer Section */
-footer {
-  text-align: center;
-  background-color: rgb(43, 40, 40);
-  /* position: absolute; */
-  color: white;
-  /* bottom: 0; */
-  width: 100%;
-  line-height: 2.5rem;
-}
 
 
 

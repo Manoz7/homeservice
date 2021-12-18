@@ -60,6 +60,8 @@ class Service_Man(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     phone = models.CharField(max_length=20, null=True)
     image = models.ImageField(upload_to='service_man/', null=True)
+    cert = models.FileField(upload_to='service_man/', null=True, default='service_man/certificate.png')
+    
     address = models.CharField(max_length=100, null=True)
     service = models.ForeignKey(
         Service, on_delete=CASCADE, null=True, blank=True)
@@ -68,20 +70,6 @@ class Service_Man(models.Model):
 
     def __str__(self):
         return self.user.username
-
-class BookService(models.Model):
-    book_id = models.AutoField(primary_key=True)
-    items_json = models.CharField(max_length=5000)
-    name = models.CharField(max_length=100)
-    phone = models.CharField(max_length=15)
-    address = models.CharField(max_length=50, default='')
-    email = models.EmailField(max_length=20, default='')
-    book_desc = models.TextField()
-    book_date = models.DateField(auto_now_add=True)
-
-    def __str__(self):
-        return self.name
-
 
 class Booking(models.Model):
     status = models.ForeignKey(Status, on_delete=models.CASCADE, null=True)

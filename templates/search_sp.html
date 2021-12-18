@@ -3,18 +3,38 @@
 
 {% block css %}
 <style>
+    body{
+        background-color: #d4e8ee;
+    }
+    .img{
+        min-height: 60vh;
+
+    }
+    .img::before{
+        content: '';
+        min-height: 75vh;
+        width: 100%;
+        position: absolute;
+        top: 11vh;
+        margin-left: 0;
+        /*abackground: url('/static/img/search.jpg') no-repeat center/cover; */
+    }
+
     
     .card{
+        background-color: #b8e0eb;
         height: 50%;
+        width: 50%;
+        margin-left: 100px;
         margin: 10.5rem 0;
     }
 </style>
 {% endblock %}
 
 {% block body %}
-<div class="container-fluid">
-    <div class="container my-4">
-        <div class="card p-2">
+<div class="container-fluid img">
+    <div class="container">
+        <div class="card p-2 mx-auto">
             <h3 class="text-center">Search Service Provider</h3>
             
             <form action="" method="POST">

@@ -12,6 +12,9 @@ urlpatterns = [
     path('search_user/', views.searchProvider, name='search_user'),
     
     path('login/', views.handleLogin, name='login'),
+    path('admin_login/', views.admin_login, name='admin_login'),
+    
+
     path('user_register/', views.user_register, name='user_register'),
     path('customer_register/', views.customer_register, name='customer_register'),
     path('admin_register/', views.admin_register, name='admin_register'),
@@ -22,9 +25,6 @@ urlpatterns = [
     path('services/<int:myid>/', views.serviceView, name='serviceView'),
     path('add_service/', views.addService, name='add_service'),
     
-    path('book_service/', views.book_service, name='book_service'),
-    path('tracker/', views.tracker, name='tracker'),
-
    
     # User Profile
     path('user_profile/', views.user_profile, name='user_profile'),
@@ -39,7 +39,11 @@ urlpatterns = [
     path('all_services/', views.allServices, name= 'allservices'),
     path('all_users/', views.allUsers, name= 'allusers'),
     path('all_customers/', views.allCustomers, name= 'allcustomers'),
+    
     path('feedback/', views.feedback, name='feedback'),
+    path('deleteFeedback/<int:myid>', views.deleteFeedback, name= 'deleteFeedback'),
+
+
     path('admin_booking/', views.adminBooking, name= 'admin_booking'),
     path('city_list/', views.adminCity, name= 'city_list'),
     path('delete_city/<int:pid>', views.deleteCity, name= 'delete_city'),
@@ -54,6 +58,8 @@ urlpatterns = [
     path('deleteService/<int:myid>', views.deleteService, name='deleteService'),
     path('deleteCustomer/<int:myid>', views.deleteCustomer, name='deleteCustomer'),
     path('deleteUser/<int:myid>', views.deleteUser, name='deleteUser'),
+    
+    path('acceptUser/<int:myid>', views.acceptUser, name='acceptUser'),
 
     # Book Services
     path('booking/<int:pid>', views.customerBooking, name='booking'),

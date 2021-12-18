@@ -1,11 +1,16 @@
 {% extends 'base.html' %}
 {% block title %}Search{% endblock title %}
 {% block css %}
+<style>
 
+    .row{
+        justify-content: space-around;
+    }
+</style>
 {% endblock css %}
 
 {% block body %}
-<div class="container my-3 cover-height">
+<div class="container my-3">
 
     <h2>Search Results:- </h2>
     {% if page %}
@@ -28,7 +33,7 @@
                 <div class="card-body text-center">
                     <h5 class="card-title">{{i.service_name}}</h5>
                     <p class="card-text">{{i.service_desc|truncatechars:80}}</p>
-                    <a href="#" class="btn btn-primary">Book Now</a>
+                    <a href="/services/{{i.service_id}}" class="btn btn-primary">Quick view</a>
                 </div>
             </div>
             {% endfor %}
@@ -36,10 +41,9 @@
 
         {% else %}
 
-        {% if users|length < 1 %} 
-        <div class="my-2">
+        {% if users|length < 1 %} <div class="my-2">
 
-        <p>No Search Result</p>
+            <p>No Search Result</p>
             Your search query did not match any documents<br>
             Service Provider unavailable on that areas <br>
             Suggestions:
@@ -52,43 +56,52 @@
                 <li> Try different keywords.</li>
                 </li>
             </ul>
-        </div>
+</div>
 
-        {% else %}
-        
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="text-center">Service Provider-details: </h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                {% for user in users %}
-                                <p>Service: {{user.service.service_name}}</p>
-                                <p>Location: {{user.city.city}}</p>
-                                <div class="col-md-8 p-0 mx-auto">
-                                    <img src="{{user.image.url}}" alt="Customer Image" width="150px" height="150px">
-                                    <h6 class="text-danger"><u> Service Provider details</u></h6>
-                                    <p class="m-0">Full Name: {{user.user.first_name}} {{book.user.user.last_name}}</p>
-                                    <p class="m-0">Contact: {{user.phone}}</p>
-                                    <p class="m-0">Address: {{user.address}}</p>
-                                    <p class="m-0">City: {{user.city.city}}</p>
-                                    <p class="m-0">Service: {{user.service.service}}</p>
-                                    <p class="m-0">Experience: {{user.experience}} years</p>
-                                </div>
-                                {% endfor %}
-                            </div>
+{% else %}
 
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="text-center">Service Provider-details: </h3>
+                
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <h5 class="text-primary">Service: <span class="text-dark">{{serv.service_name}}</span></h5>
+                    <h5 class="text-primary">Location: <span class="text-dark">{{ct.city}}</span></h5>
+    
+                    {% for user in users %}
+                    <div class="card d-flex col-md-4 p-1">
+                        <div class="col-md-8 mx-auto">
+                            <img src="{{user.image.url}}" alt="Customer Image" width="150px" height="150px">
+                            <h5 class="mt-2 text-primary"><strong>{{user.user.first_name}}
+                                    {{user.user.last_name}}</strong></h5>
+                            <p class="m-0">Contact: {{user.phone}}</p>
+                            <p class="m-0">Address: {{user.address}}</p>
+                            <p class="m-0">City: {{user.city.city}}</p>
+                            <p class="m-0">Service: {{user.service.service_name}}</p>
+                            <p>Experience: {{user.experience}} years</p>
+                            <span>Certficate: 
+                            <img src="{{user.cert.url}}" alt="Customer Image" width="250px" height="150px">
+                                
+                            </span>
+                            <a href="{% url 'booking' user.id %}" class="btn btn-outline-primary">Book Now</a>
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
+
             </div>
+        </div>
+    </div>
+</div>
 
-            {% endif %}
+{% endif %}
 
 
-            {% endif %}
+{% endif %}
 
 </div>
 {% endblock %}

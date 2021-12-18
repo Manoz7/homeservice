@@ -3,7 +3,7 @@
 
 {% block css %}
 <style>
-    .container{
+    .container {
         min-height: 75vh;
     }
 </style>
@@ -19,7 +19,9 @@
 
                 <div class="card">
 
-                    <div class="card-header"><h3 class="text-center">{{ service.service_name }}</h3></div>
+                    <div class="card-header">
+                        <h3 class="text-center">{{ service.service_name }}</h3>
+                    </div>
 
                     <div class="card-body">
                         <div class="row">
@@ -55,7 +57,13 @@
                                     <p>Address: {{user.city.city}}</p>
                                     <p>Contact: {{user.phone}}</p>
                                     <p>Experience: {{user.experience}} years</p>
-                                    <a href="{% url 'booking' user.user.id %}" class="btn btn-primary">Book Now</a>
+
+                                    <p>
+                                        <a href="/media/service_man/certificate.png">Training Certificate</a>
+                                    </p>
+
+
+                                    <a href="{% url 'booking' user.user.id %}" class="btn btn-primary mt-2">Book Now</a>
 
 
                                 </div>
