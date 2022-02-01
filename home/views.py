@@ -609,7 +609,7 @@ def customerBooking(request, pid):
         status = Status.objects.get(status="pending")
         book = Booking.objects.create(status=status, user=serv, customer=customer,
                                       book_date=data['date'], book_days=data['day'], book_hours=data['hour'])
-
+        print(book)
         return redirect('booking_details')
 
     return render(request, 'booking.html', {'serv': serv, 'customer': customer})

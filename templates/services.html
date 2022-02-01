@@ -35,22 +35,23 @@
                 <h1 class="text-center serv">Services offered: </h1>
 
             </div>
-            
+
         </div>
     </div>
     <div class="main-box container">
         <div class="row card-row">
 
             {% for i in services %}
-            <div class="col-md-4 col-sm-12">
+            <div class=" col-lg-3 col-md-4 col-sm-12">
 
                 <div class="card my-2">
-                    <img class="card-img-top image-thumbnail w-75 m-auto" src="/media/{{i.image}}" alt="Services" style="height: 250px;">
+                    <img class="card-img-top image-thumbnail w-75 m-auto" src="/media/{{i.image}}" alt="Services"
+                        style="height: 200px;">
                     <div class="card-body text-center">
                         <h5 class="card-title">{{i.service_name}}</h5>
                         <p class="card-text">{{i.service_desc|truncatechars:80}}</p>
                         <a href="/services/{{i.service_id}}" class="btn btn-primary">Quick View</a>
-                        
+
                     </div>
                 </div>
             </div>

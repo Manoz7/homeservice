@@ -28,14 +28,10 @@
             <i class="fas fa-bars"></i>
         </span>
         <div class="left_area">
-            <h3>Ghar<span>Sewa</span></h3>
+        <h3><a href="{% url 'index' %}" class="text-decoration-none">Ghar<span>Sewa</span></a></h3>
 
         </div>
-        <div class="right-area">
-            <a href="{% url 'index' %}" class="website btn-sm btn-primary">
-                Site
-            </a>
-        </div>
+          
     </header>
     <!-- header ends here -->
 
@@ -46,8 +42,8 @@
             <h4>Mr. {{request.user|title}}</h4>
         </center>
 
-        <a href="{% url 'dashboard' %}">
-            <i class="fas fa-desktop"></i> <span>Dashboard</span>
+        <a href="{% url 'index' %}">
+            <i class="fas fa-home"></i> <span>Home</span>
         </a>
 
         <a href="{% url 'allservices' %}">
@@ -73,6 +69,7 @@
         <a href="{% url 'admin_profile' %}">
             <i class="fas fa-user-circle"></i> <span>Profile</span>
         </a>
+        
         <a href="{% url 'logout' %}">
             <i class="fas fa-sign-out-alt"></i> <span>Log Out</span>
         </a>

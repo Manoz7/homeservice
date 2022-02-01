@@ -84,7 +84,7 @@
                 </td>
                 {% endif %}
 
-                {% ifequal book.status.status 'Accept' %}
+                {% if book.status.status == 'Accept' %}
                 <td style="font-weight:bold;color:blue">
                     <center> Accepted</center>
                 </td>
@@ -97,7 +97,7 @@
                             </button></center>
                     </a>
                 </td>
-                {% endifequal %}
+                {% endif %}
 
             </tr>
             {% endfor %}
@@ -143,14 +143,14 @@
                 <td>{{book.book_days}} days</td>
 
 
-                {% ifequal book.status.status 'Accept' %}
+                {% if book.status.status == 'Accept' %}
                 <td><span
                         style="color:white;background:green;padding:0.2em 0.8em 0.2em 0.8em;border-radius:8%">{{book.status.status}}</span>
                 </td>
                 {% else %}
                 <td><span>{{book.status.status}}</span>
                 </td>
-                {% endifequal %}
+                {% endif %}
 
                 {% if book.status.status == 'Accept' %}
                 <td style="font-weight:bold;color:rgb(2, 68, 11)">Accepted</td>

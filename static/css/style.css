@@ -93,7 +93,7 @@ img {
 .ourTeam-hedding h1 {
   font-size: 30px;
   font-weight: bold;
-  color: #555251;
+  color: #75716f;
 }
 
 .ourTeam-box {
@@ -116,11 +116,11 @@ img {
 }
 .section3 {
   background-color: var(--color1);
-  margin-top: 10px;
+  
 }
 .section3 i {
   color: #fff;
-  padding: 15px;
+  padding: 5px;
   font-size: 20px;
 }
 .section-info {

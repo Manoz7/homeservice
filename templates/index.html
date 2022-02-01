@@ -14,6 +14,10 @@
     margin-right: 25px;
     font-weight: bolder;
   }
+
+  #cardRow {
+    justify-content: space-around;
+  }
 </style>
 {% endblock %}
 {% block body %}
@@ -88,7 +92,7 @@
       </p>
     </div>
     <div class=" card col-md-12 mt-4" style="border-style: none;">
-      <a href="/about" class="btn btn-outline-primary m-auto w-25">More Info</a></a>
+      <a href="/about" class="btn btn-outline-primary m-auto">More Info</a></a>
     </div>
   </div>
 </section>
@@ -109,7 +113,7 @@
       </div>
 
       <div class="col-md-8">
-        <div class="row">
+        <div class="row" id="cardRow">
           {% for item in services.all|slice:"0:6" %}
           <div class="col-md-4">
             <a href="/services/{{item.service_id}}">
@@ -130,7 +134,7 @@
     </div>
   </div>
   <div class=" card col-md-12 mt-4" style="border-style: none;">
-    <a href="/services" class="btn btn-outline-primary m-auto w-25">All Services</a></a>
+    <a href="/services" class="btn btn-outline-primary m-auto">All Services</a></a>
   </div>
 </div>
 
@@ -152,8 +156,8 @@
 
       <h4 class="text-center mt-2 mb-3" style="color: white;">One Stop Solution for your Complete Home Maintenance.</h4>
       <div class="row">
-        <div class="col-md-6">
-          <div class="card mb-4" style="width: 300px;">
+        <div class="col-md-6 col-sm-6">
+          <div class="card mb-4">
             <div class="row no-gutters">
               <div class="col-md-6">
                 <img class="card-img-top" src="{% static 'img/et.png' %}" alt="Expert Technician"
@@ -167,8 +171,8 @@
             </div>
           </div>
         </div>
-        <div class="col-md-6">
-          <div class="card mb-4" style="width: 300px;">
+        <div class="col-md-6 col-sm-6">
+          <div class="card mb-4">
             <div class="row no-gutters">
               <div class="col-md-6">
                 <img class="card-img-top" src="{% static 'img/clock.jpg' %}" alt="24/7 services"
@@ -182,11 +186,9 @@
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="row">
-        <div class="col-md-6">
-          <div class="card mb-4" style="width: 300px;">
+        <div class="col-md-6 col-sm-6">
+          <div class="card mb-4" >
             <div class="row no-gutters">
               <div class="col-md-6">
                 <img class="card-img-top" src="{% static 'img/guarn.png' %}" alt="Service Guarantee"
@@ -200,8 +202,8 @@
             </div>
           </div>
         </div>
-        <div class="col-md-6">
-          <div class="card mb-4" style="width: 300px;">
+        <div class="col-md-6 col-sm-6">
+          <div class="card mb-4" >
             <div class="row no-gutters">
               <div class="col-md-6">
                 <img class="card-img-top" src="{% static 'img/price.jpg' %}" alt="Affordable Price"
@@ -215,11 +217,9 @@
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="row">
-        <div class="col-md-6">
-          <div class="card mb-4" style="width: 300px;">
+        <div class="col-md-6 col-sm-6">
+          <div class="card mb-4" >
             <div class="row no-gutters">
               <div class="col-md-6">
                 <img class="card-img-top" src="{% static 'img/hand.png' %}" alt="Hassle Free Services"
@@ -233,8 +233,8 @@
             </div>
           </div>
         </div>
-        <div class="col-md-6">
-          <div class="card mb-4" style="width: 300px;">
+        <div class="col-md-6 col-sm-6">
+          <div class="card mb-4" >
             <div class="row no-gutters">
               <div class="col-md-6">
                 <img class="card-img-top" src="{% static 'img/price.jpg' %}" alt="Affordable Price"
